@@ -61,7 +61,7 @@ void GameScene_Box2D::initPhysics()
     
     _debugDraw = new GLESDebugDraw( PTM_RATIO );
     _world->SetDebugDraw(_debugDraw);
-    
+    /*
     const b2ParticleSystemDef particleSystemDef;
     //particleSystemDef->flags = b2_waterParticle;
     
@@ -71,7 +71,7 @@ void GameScene_Box2D::initPhysics()
     b2ParticleGroupDef groupDef;
     //groupDef.flags = b2_waterParticle;
     _particleGroup = _particleSystem->CreateParticleGroup(groupDef);
-    
+    */
     
     
     uint32 flags = 0;
@@ -170,7 +170,7 @@ void GameScene_Box2D::update(float dt)
     this->delTouchedBalls();
     this->refillBoll();
     _world->Step(dt, velocityIterations, positionIterations);
-    this->updateParticles(dt);
+    //this->updateParticles(dt);
 }
 
 void GameScene_Box2D::updateParticles(float dt)
@@ -239,10 +239,10 @@ BallSprite *GameScene_Box2D::createSprite(Vec2 &pos){
             break;
     }
     
-    //BallSprite *ball = BallSprite::createBallSprite(this, _world, filename->getCString());
-    BallSprite *ball = BallSprite::createParticleSprite(this, _world, _particleSystem, _particleGroup, filename->getCString());
-    //ball->setPosition(pos);
-    ball->setParticlePpos(_particleSystem, _particleGroup, pos.x, pos.y);
+    BallSprite *ball = BallSprite::createBallSprite(this, _world, filename->getCString());
+    //BallSprite *ball = BallSprite::createParticleSprite(this, _world, _particleSystem, _particleGroup, filename->getCString());
+    ball->setPosition(pos);
+    //ball->setParticlePpos(_particleSystem, _particleGroup, pos.x, pos.y);
     ball->setTag(spriteType::kBall);
     ball->setBallType(type);
     _bollArray.push_back(ball);
@@ -477,7 +477,7 @@ void GameScene_Box2D::delTouchedBalls() {
             _delballPos.push_back(ball->getPosition());
            // _world->DestroyBody(ball->getB2Body());
             ball->deleteParticle(_particleSystem,_particleGroup);
-            ball->removeFromParent();
+            //ball->removeFromParent();
         }
         else {
             tmpbollArray.push_back(ball);
