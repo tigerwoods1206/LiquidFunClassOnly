@@ -55,8 +55,8 @@ void GameScene_Box2D::initPhysics()
 {
     b2Vec2 gravity = b2Vec2(0, -9.8);    //重力を作成
     _world = new b2World(gravity);       //Worldを作成
-    b2DestructionListener *listener;
-    _world->SetDestructionListener(listener);
+   // b2DestructionListener *listener;
+    //_world->SetDestructionListener(listener);
    // _world->SetDestructionListener(this);
     
     _debugDraw = new GLESDebugDraw( PTM_RATIO );
@@ -475,9 +475,9 @@ void GameScene_Box2D::delTouchedBalls() {
         BallSprite *ball = (BallSprite *)*tempIterator;
         if (ball->getDeleteState()==BallSprite::deleteState::kDelete) {
             _delballPos.push_back(ball->getPosition());
-           // _world->DestroyBody(ball->getB2Body());
-            ball->deleteParticle(_particleSystem,_particleGroup);
-            //ball->removeFromParent();
+            _world->DestroyBody(ball->getB2Body());
+            //ball->deleteParticle(_particleSystem,_particleGroup);
+            ball->removeFromParent();
         }
         else {
             tmpbollArray.push_back(ball);
