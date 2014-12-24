@@ -424,7 +424,7 @@ void GameScene_Box2D::fillBoll() {
     std::random_device rd;
     
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> score(1.0,2.0);
+    std::uniform_real_distribution<double> score(1.0,1.8);
     
     auto window_size = Director::getInstance()->getWinSize();
     float radius = BallSprite::getBallRadius();
