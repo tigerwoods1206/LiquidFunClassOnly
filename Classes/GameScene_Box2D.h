@@ -15,10 +15,11 @@
 #include "Box2D.h"
 #include "GLESDebugDraw.h"
 #include "BallSprite.h"
+#include "TGestureRecognizer.h"
 
 using namespace cocos2d;
 
-class GameScene_Box2D : public Layer
+class GameScene_Box2D : public Layer ,public TGestureHandler
 {
 public:
     ~GameScene_Box2D();
@@ -26,17 +27,38 @@ public:
     virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags) override;
     static Scene *createGameScene_Box2D();
     CREATE_FUNC(GameScene_Box2D);
+    
     void initPhysics();
     void update(float dt);
     void updateParticles(float dt);
     
     BallSprite *createSprite(Vec2 &pos, Vec2 &velocity);
     void addParticle();
+    void addRandumPower2Particle();
     
     //touch
     void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
     void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    void onTouchesCancelled(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    
+    //Tap Gesture
+public:
+    // TGestureHandler's stuff
+    virtual bool onGestureTap(TGestureTap* gesture);
+    //virtual bool onGestureLongPress(TGestureLongPress* gesture);
+    //virtual bool onGesturePan(TGesturePan* gesture);
+    //virtual bool onGesturePinch(TGesturePinch* gesture);
+    //virtual bool onGestureRotation(TGestureRotation* gesture);
+    //virtual bool onGestureSwipe(TGestureSwipe* gesture);
+private:
+    void initGestureRecognizer();
+    void setInfoLabel(const std::string& text);
+    
+protected:
+    TGestureRecognizer* _gestureRecognizer;
+
+    
     
 private:
     
@@ -78,8 +100,6 @@ private:
     void delTouchedBalls();
     std::vector<BallSprite*> _bollArray;
 
-    
-    
 private:
     b2World *_world;
     GLESDebugDraw *_debugDraw;
@@ -92,6 +112,7 @@ protected:
     cocos2d::EventListenerTouchOneByOne* _touchListener;
     cocos2d::EventListenerKeyboard* _keyboardListener;
     cocos2d::CustomCommand _customCmd;
+    
 };
 
 #endif /* defined(__TumTum_Base__GameScene_Box2D__) */

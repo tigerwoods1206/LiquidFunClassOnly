@@ -156,6 +156,7 @@
 		50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 50EF629517ECD46A001EB2F8 /* Icon-100.png */; };
 		50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */ = {isa = PBXBuildFile; fileRef = 50EF62A017ECD613001EB2F8 /* Icon-29.png */; };
 		50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 50EF62A117ECD613001EB2F8 /* Icon-50.png */; };
+		7646920B1A4A8B36003EB054 /* TGestureRecognizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 764692091A4A8B36003EB054 /* TGestureRecognizer.cpp */; };
 		768BB5C31A43EE9100BE1DDC /* GameScene_Box2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 768BB5BF1A43EE9100BE1DDC /* GameScene_Box2D.cpp */; };
 		768BB5CA1A43FB3C00BE1DDC /* GLESDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 768BB5C81A43FB3C00BE1DDC /* GLESDebugDraw.cpp */; };
 		768BB5CD1A43FBEE00BE1DDC /* BallSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 768BB5CB1A43FBEE00BE1DDC /* BallSprite.cpp */; };
@@ -375,6 +376,8 @@
 		50EF629517ECD46A001EB2F8 /* Icon-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-100.png"; sourceTree = "<group>"; };
 		50EF62A017ECD613001EB2F8 /* Icon-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29.png"; sourceTree = "<group>"; };
 		50EF62A117ECD613001EB2F8 /* Icon-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-50.png"; sourceTree = "<group>"; };
+		764692091A4A8B36003EB054 /* TGestureRecognizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TGestureRecognizer.cpp; sourceTree = "<group>"; };
+		7646920A1A4A8B36003EB054 /* TGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TGestureRecognizer.h; sourceTree = "<group>"; };
 		768BB5BF1A43EE9100BE1DDC /* GameScene_Box2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene_Box2D.cpp; sourceTree = "<group>"; };
 		768BB5C01A43EE9100BE1DDC /* GameScene_Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene_Box2D.h; sourceTree = "<group>"; };
 		768BB5C81A43FB3C00BE1DDC /* GLESDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLESDebugDraw.cpp; sourceTree = "<group>"; };
@@ -542,6 +545,8 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				764692091A4A8B36003EB054 /* TGestureRecognizer.cpp */,
+				7646920A1A4A8B36003EB054 /* TGestureRecognizer.h */,
 				768BB5CB1A43FBEE00BE1DDC /* BallSprite.cpp */,
 				768BB5CC1A43FBEE00BE1DDC /* BallSprite.h */,
 				768BB5BF1A43EE9100BE1DDC /* GameScene_Box2D.cpp */,
@@ -1160,6 +1165,7 @@
 				A00E3D6119008BCB00F01AFF /* TestEntries.cpp in Sources */,
 				500DC783190ECFC4007B91BF /* b2ContactManager.cpp in Sources */,
 				500DC829190ECFC4007B91BF /* b2FreeList.cpp in Sources */,
+				7646920B1A4A8B36003EB054 /* TGestureRecognizer.cpp in Sources */,
 				500DC82D190ECFC4007B91BF /* b2Settings.cpp in Sources */,
 				500DC7A3190ECFC4007B91BF /* b2GearJoint.cpp in Sources */,
 				500DC7A1190ECFC4007B91BF /* b2FrictionJoint.cpp in Sources */,

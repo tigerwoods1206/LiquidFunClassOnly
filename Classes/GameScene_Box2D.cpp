@@ -27,23 +27,7 @@ bool GameScene_Box2D::init()
     }
     
     this->initPhysics();
-    
-    //event listener
-    //イベントリスナー作成
-    auto listener = EventListenerTouchAllAtOnce::create();
-    
-    //イベントを飲み込むかどうか
-    //listener->setSwallowTouches(true);
-    
-    //タッチメソッド設定
-    listener->onTouchesBegan = CC_CALLBACK_2(GameScene_Box2D::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(GameScene_Box2D::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(GameScene_Box2D::onTouchesEnded, this);
-    
-    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-    
-    //優先度100でディスパッチャーに登録
-    this->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 100);
+    this->initGestureRecognizer();
     
     this->fillBoll();
     
@@ -153,6 +137,58 @@ void GameScene_Box2D::initPhysics()
 
 }
 
+void GameScene_Box2D::initGestureRecognizer()
+{
+    // Init gesture recognizer
+    _gestureRecognizer = new TSimpleGestureRecognizer();
+    _gestureRecognizer->init();
+    _gestureRecognizer->setGestureHandler(this);
+    
+    // Enable all gesture kinds
+    _gestureRecognizer->setTapEnabled(true);
+    _gestureRecognizer->setDoubleTapEnabled(true);
+    
+    // Taps will be fired immediately without waiting for double tap
+    _gestureRecognizer->setTapRequiresDoubleTapRecognitionToFail(false);
+    
+    // Other config
+    // _gestureRecognizer->setTapThreshold(1.0f);
+    // _gestureRecognizer->setLongPressThreshold(1.0f);
+    _gestureRecognizer->setDoubleTapInterval(0.3f);
+    //_gestureRecognizer->setPinchFingersDistanceChangeTolerance(0.1f);
+    //_gestureRecognizer->setRotationFingersDistanceChangeTolerance(0.5f);
+    // _gestureRecognizer->setSwipeThreshold(0.3f);
+    
+    //
+    // IMPORTANT:
+    // For multiple touch gestures on iOS (pinch, rotation), always remember tu put
+    // the below line of code right after creating the CCEAGLView in AppController.mm
+    // [eaglView setMultipleTouchEnabled:YES];
+    // For Android, there no need to do this.
+    //
+    
+    // Create touch listener and register it with cocos2d to receive touch events
+    
+    //event listener
+    //イベントリスナー作成
+    auto listener = EventListenerTouchAllAtOnce::create();
+    
+    //イベントを飲み込むかどうか
+    //listener->setSwallowTouches(true);
+    
+    //タッチメソッド設定
+    listener->onTouchesBegan = CC_CALLBACK_2(GameScene_Box2D::onTouchesBegan, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(GameScene_Box2D::onTouchesMoved, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(GameScene_Box2D::onTouchesEnded, this);
+    listener->onTouchesCancelled = CC_CALLBACK_2(GameScene_Box2D::onTouchesCancelled, this);
+    
+    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+    
+    //優先度100でディスパッチャーに登録
+    this->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 100);
+    
+}
+
 void GameScene_Box2D::draw(Renderer *renderer, const Mat4 &transform, uint32_t transformFlags)
 {
     Layer::draw(renderer, transform, transformFlags);
@@ -206,6 +242,9 @@ GameScene_Box2D::~GameScene_Box2D()
     
     delete _world;        //Worldを解放
     _world = NULL;
+    
+    
+    CC_SAFE_RELEASE(_gestureRecognizer);
 }
 
 #pragma mark -
@@ -295,8 +334,46 @@ void GameScene_Box2D::addParticle(){
 }
 
 #pragma mark -
+#pragma mark 全てのparticleにランダム速度を加える
+
+void GameScene_Box2D::addRandumPower2Particle()
+{
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> velocity(-100.0f,100.0f);
+
+    //速度リスト取得
+    b2Vec2* vList = _particleSystem->GetVelocityBuffer();
+    
+    //グループが管理しているパーティクルのデータ更新
+    for(int i = 0; i != _particleGroup->GetParticleCount();i++,vList++){
+        (*vList).x = velocity(mt)/PTM_RATIO;
+        (*vList).y = velocity(mt)/PTM_RATIO;
+    }
+
+}
+
+#pragma mark -
 #pragma mark タップ処理
+
+bool GameScene_Box2D::onGestureTap(TGestureTap* gesture)
+{
+    
+    if (gesture->getNumClicks() == 1) {
+    //setInfoLabel("Tap detected");
+    }
+    else {
+    //setInfoLabel("Double Tap detected");
+        this->addRandumPower2Particle();
+    }
+    
+    return false;
+}
+
+
 void GameScene_Box2D::onTouchesBegan(const std::vector<cocos2d::Touch *> &touches, cocos2d::Event *event){
+    
+    _gestureRecognizer->onTouchBegan(touches.at(0), event);
     
     Director* pDirector = CCDirector::getInstance();
     Point touchPoint = pDirector -> convertToGL(touches.at(0) -> getLocationInView());
@@ -315,6 +392,9 @@ void GameScene_Box2D::onTouchesBegan(const std::vector<cocos2d::Touch *> &touche
 }
 
 void GameScene_Box2D::onTouchesMoved(const std::vector<cocos2d::Touch *> &touches, cocos2d::Event *event){
+    
+    _gestureRecognizer->onTouchMoved(touches.at(0), event);
+    
     Director* pDirector = CCDirector::getInstance();
     Point touchPoint = pDirector -> convertToGL(touches.at(0) -> getLocationInView());
     
@@ -338,6 +418,9 @@ void GameScene_Box2D::onTouchesEnded(const std::vector<cocos2d::Touch *> &touche
      ball->getPhysicsBody()->setEnable(true);
      }
      */
+    
+    _gestureRecognizer->onTouchEnded(touches.at(0), event);
+    
     Director* pDirector = CCDirector::getInstance();
     Point touchPoint = pDirector -> convertToGL(touches.at(0) -> getLocationInView());
     
@@ -349,6 +432,11 @@ void GameScene_Box2D::onTouchesEnded(const std::vector<cocos2d::Touch *> &touche
         }
     }
 }
+
+void GameScene_Box2D::onTouchesCancelled(const std::vector<cocos2d::Touch *> &touches, cocos2d::Event *event){
+    _gestureRecognizer->onTouchCancelled(touches.at(0), event);
+}
+
 
 #pragma mark -
 #pragma mark 衝突処理
@@ -464,7 +552,6 @@ void GameScene_Box2D::refillBoll()
     }
     
     _delballPos.clear();
-    
 }
 
 #pragma mark -
