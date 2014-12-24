@@ -17,6 +17,9 @@ Scene *GameScene_Box2D::createGameScene_Box2D()
     return scene;
 }
 
+#pragma mark -
+#pragma mark init
+
 bool GameScene_Box2D::init()
 {
     if ( !Layer::init() ) {
@@ -207,7 +210,7 @@ GameScene_Box2D::~GameScene_Box2D()
 
 #pragma mark -
 #pragma mark ボール生成
-BallSprite *GameScene_Box2D::createSprite(Vec2 &pos){
+BallSprite *GameScene_Box2D::createSprite(Vec2 &pos, Vec2 &velocity){
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> intval(0,3);
@@ -242,7 +245,7 @@ BallSprite *GameScene_Box2D::createSprite(Vec2 &pos){
     //BallSprite *ball = BallSprite::createBallSprite(this, _world, filename->getCString());
     BallSprite *ball = BallSprite::createParticleSprite(this, _world, _particleSystem, _particleGroup, filename->getCString());
     //ball->setPosition(pos);
-    ball->setParticlePpos(_particleSystem, _particleGroup, pos.x, pos.y);
+    ball->setParticlePpos(_particleSystem, _particleGroup, pos.x, pos.y, velocity.x, velocity.y);
     ball->setTag(spriteType::kBall);
     ball->setBallType(type);
     _bollArray.push_back(ball);
@@ -432,7 +435,8 @@ void GameScene_Box2D::fillBoll() {
     for (float pos_x = 0; pos_x <= window_size.width; pos_x += vir_rectSize.width *score(mt) ) {
         for (float pos_y = 0; pos_y <= window_size.height; pos_y += vir_rectSize.height * score(mt)) {
             Vec2 pos = Vec2(pos_x, pos_y);
-            BallSprite *ball = this->createSprite(pos);
+            Vec2 vel = Vec2(0,0);
+            BallSprite *ball = this->createSprite(pos,vel);
             if (this->isFullBoll(ball)) {
                 return;
             }
@@ -455,7 +459,8 @@ void GameScene_Box2D::refillBoll()
             curPos.x -= 120;
         }
         Vec2 refilPos = Vec2(curPos.x, window_size.height-120);
-        this->createSprite(refilPos);
+        Vec2 vel = Vec2(0,-100);
+        this->createSprite(refilPos, vel);
     }
     
     _delballPos.clear();

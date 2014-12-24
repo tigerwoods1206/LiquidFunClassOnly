@@ -28,7 +28,7 @@ public:
     static BallSprite *createParticleSprite(Node *parent ,b2World *world, b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup,const std::string& filename);
     static void setPhysics2Sprite(b2World *world, cocos2d::extension::PhysicsSprite *sptite, b2BodyType type, b2Shape shape);
     static float getBallRadius();
-    void setParticlePpos(b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup,float x, float y);
+    void setParticlePpos(b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup, float posx, float posy, float vx, float vy);
     void deleteParticle(b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup);
     
     // 衝突状態の設定

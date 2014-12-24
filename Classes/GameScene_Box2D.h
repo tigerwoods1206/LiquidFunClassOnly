@@ -30,7 +30,7 @@ public:
     void update(float dt);
     void updateParticles(float dt);
     
-    BallSprite *createSprite(Vec2 &pos);
+    BallSprite *createSprite(Vec2 &pos, Vec2 &velocity);
     void addParticle();
     
     //touch

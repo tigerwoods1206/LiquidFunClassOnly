@@ -93,6 +93,7 @@ BallSprite *BallSprite::createParticleSprite(Node *parent ,b2World *world, b2Par
     particleDef.flags = b2_waterParticle;
     particleDef.flags |= b2_destructionListenerParticle;
     particleDef.color = b2ParticleColor(100,150,255,255);
+    //particleDef.velocity.y = -100;
     
     //グループへのポインタを渡しておく事でそのグループ内で管理する事ができる。
     particleDef.group = particleGroup;
@@ -152,25 +153,27 @@ float BallSprite::getBallRadius()
     return 50;
 }
 
-void BallSprite::setParticlePpos(b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup, float x, float y)
+void BallSprite::setParticlePpos(b2ParticleSystem *particleSystem, b2ParticleGroup *particleGroup, float posx, float posy, float vx, float vy)
 {
-    this->setPosition(Vec2(x,y));
+    this->setPosition(Vec2(posx,posy));
     
     //ユーザーデータ取得
     void ** userData = particleSystem->GetUserDataBuffer() + particleGroup->GetBufferIndex();
     
-    //色リスト取得
-    b2ParticleColor * colorList = particleSystem->GetColorBuffer();
-    
     //座標リスト取得
     b2Vec2* posList = particleSystem->GetPositionBuffer();
     
+    //速度リスト取得
+    b2Vec2* vList = particleSystem->GetVelocityBuffer();
+    
     //グループが管理しているパーティクルのデータ更新
-    for(int i = 0; i != particleGroup->GetParticleCount();i++,colorList++,posList++,userData++){
+    for(int i = 0; i != particleGroup->GetParticleCount();i++,posList++,vList++,userData++){
         BallSprite *ball = (BallSprite*)(*userData);
         if (this == ball) {
-            posList->x = x/PTM_RATIO;
-            posList->y = y/PTM_RATIO;
+            posList->x = posx/PTM_RATIO;
+            posList->y = posy/PTM_RATIO;
+            vList->x = vx;
+            vList->y = vy;
             //particleSystem->SetPositionBuffer(posList, 1);
             break;
         }
